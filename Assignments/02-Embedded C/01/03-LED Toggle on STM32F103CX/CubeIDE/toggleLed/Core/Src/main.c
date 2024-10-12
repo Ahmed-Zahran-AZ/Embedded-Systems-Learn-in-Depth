@@ -3,6 +3,7 @@
 #define RCC_BASE 0x40021000
 /*Fastest method*/
 #define PORTA_BASE 0X40010800
+#define PORTC_BASE 0X40011000
 
 typedef union {
 	vuint32_t all_fields;
@@ -48,20 +49,22 @@ typedef union {
 #define GPIOA_CRH	*((vuint32_t*) (PORTA_BASE + 0x04))
 #define GPIOA_ODR	*((vuint32_t*) (PORTA_BASE+0x0C))
 
+#define GPIOC_CRH	*((vuint32_t*) (PORTC_BASE + 0x04))
 
 
 #define ODR (*(volatile  reg*)(PORTA_BASE+0x0C))
+#define GPIOC_ODR (*(volatile  reg*)(PORTC_BASE+0x0C))
 
-void main(void){
+int main(void){
 
-RCC_APB2ENR |= 1<<2;
-GPIOA_CRH 	&= 0xff0fffff;
-GPIOA_CRH 	|= 0x00200000;
+RCC_APB2ENR |= 1<<4;
+GPIOC_CRH 	&= 0xff0fffff;
+GPIOC_CRH 	|= 0x00200000;
 
 while (1){
 for (int i =0; i<100000; i++);
-ODR.pin13=0;
+GPIOC_ODR.pin13=0;
 for (int i =0; i<=100000; i++);
-ODR.pin13=1;
+GPIOC_ODR.pin13=1;
 }
 }
